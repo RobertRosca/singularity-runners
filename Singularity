@@ -4,6 +4,7 @@ From: debian:buster
 
 %files
     ./scripts /opt/scripts
+    ./README.md /.singularity.d/runscript.help
 
 %environment
     export AGENT_TOOLSDIRECTORY=/opt/hostedtoolcache
@@ -33,30 +34,3 @@ From: debian:buster
 %labels
     Author RobertRosca
     Version v0.1.0
-
-%help
-    Singularity container with dependencies required to run a self-hosted GitHub
-    Runner. Contains some convenience scripts (`/opt/scripts`) to set up and
-    start the runner.
-
-    To set up the runner:
-
-        singularity run -C \
-            -B $LOCAL_STORAGE:/mnt/github-runner \
-            --app configure \
-            ./github-runner.sif \
-            --url $GITHUB_REPO_URL \
-            --token $GITHUB_RUNNER_TOKEN
-
-    `LOCAL_STORAGE` should be the path to where you want to store the runner
-    files locally; `url` and `token` values can be found on GitHub when setting
-    up your own runner: Settings -> Actions -> Self-hosted runners -> Add runner
-
-    To start the runner as a service:
-
-        singularity instance start -C \
-            -B $LOCAL_STORAGE:/mnt/github-runner \
-            ./github-runner.sif $INSTANCE_NAME
-
-    `INSTANCE_NAME` can be any name you want the instance to have, it's what
-    you'll see when running `singularity instance list`
