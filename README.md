@@ -10,7 +10,7 @@ start the runner.
 To get the container either:
 
 1. Build it locally:  \
-   `sudo singularity build github-runner.sif ./singularity.def`
+   `sudo singularity build github-runner.sif ./Singularity`
 2. Pull it from Singularity Hub:  \
    `singularity pull shub://RobertRosca/gh-runner-singularity`
 
@@ -46,7 +46,7 @@ Here I want to have a directory `~/.github-runners/` which stores all the data
 for the runners, first I build the container locally:
 
 ```
-sudo singularity build github-runner.sif ./singularity.def
+sudo singularity build github-runner.sif ./Singularity
 ```
 
 I want this runner to be configured for this repository:
@@ -73,6 +73,8 @@ singularity instance start -C \
     -B ~/.github-runners/vip-ipykernel/:/mnt/github-runner \
     ./github-runner.sif vip-ipykernel-runner
 ```
+
+## Running Instances as Systemd Service
 
 It's also possible to run the instance as a service, read more about this
 [here](https://sylabs.io/guides/3.5/user-guide/running_services.html#system-integration-pid-files). In this case I would start the instance with
