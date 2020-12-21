@@ -19,10 +19,8 @@ Then to configure your first runner:
 ```
 singularity run -C \
     -B $LOCAL_STORAGE:/mnt/github-runner \
-    --app configure \
     ./github-runner.sif \
-       --url $GITHUB_REPO_URL \
-       --token $GITHUB_RUNNER_TOKEN
+    configure --url $GITHUB_REPO_URL --token $GITHUB_RUNNER_TOKEN
 ```
 
 `LOCAL_STORAGE` should be the path to where you want to store the runner
@@ -60,8 +58,7 @@ just copy-paste it from the 'configure' line:
 ```
 singularity run -C \
     -B ~/.github-runners/vip-ipykernel/:/mnt/github-runner \
-    --app configure \
-    ./github-runner.sif --url https://github.com/RobertRosca/vip-ipykernel --token AAYPOCA2ZF9HQYEHPMUYHYS735IYW
+    ./github-runner.sif configure --url https://github.com/RobertRosca/vip-ipykernel --token AAYPOCA2ZF9HQYEHPMUYHYS735IYW
 ```
 
 This downloads and sets up the local runner under
