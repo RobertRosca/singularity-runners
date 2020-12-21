@@ -1,5 +1,4 @@
 # Template files have odd formatting so we exclude them
-exclude: .*/template-.*\.py
 repos:
   - repo: https://github.com/pycqa/isort
     rev: 5.3.0

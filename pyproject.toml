@@ -14,7 +14,6 @@ exclude = '''  # Specify the files/dirs that should be ignored by the black form
   | buck-out
   | build
   | dist
-  | template-.*\.py
 )/
 '''
 
