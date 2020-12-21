@@ -3,7 +3,7 @@ From: debian:buster
 
 
 %files
-    ./scripts /opt/scripts
+    ./ /opt/gh-runner-singularity
     ./README.md /.singularity.d/runscript.help
 
 %environment
@@ -15,7 +15,7 @@ From: debian:buster
     apt-get install -y apt-transport-https build-essential ca-certificates \
         curl gettext iputils-ping jq libcurl4-openssl-dev liblttng-ust0 \
         openssh-client software-properties-common sudo supervisor unzip \
-        zlib1g-dev
+        zlib1g-dev python3-pip
 
     apt-get clean
 
@@ -25,11 +25,14 @@ From: debian:buster
     ln -s /mnt/github-runner /home/github-runner
     ln -s /home/github-runner/hostedtoolcache /opt/hostedtoolcache
 
-%apprun configure
-    exec /opt/scripts/configure.py "$@"
+    python3 -m pip install --upgrade pip
+    python3 -m pip install /opt/gh-runner-singularity
+
+%runscript
+    exec gh-runner-singularity "$@"
 
 %startscript
-    exec /opt/scripts/start.py "$@"
+    exec gh-runner-singularity start "$@"
 
 %labels
     Author RobertRosca
