@@ -6,6 +6,7 @@ import urllib.request
 from pathlib import Path
 from typing import List
 
+
 def subparser(parser: argparse.ArgumentParser):
     parser.add_argument(
         '--runner-version',
@@ -55,6 +56,7 @@ def subparser(parser: argparse.ArgumentParser):
 
     return parser
 
+
 def configure(
     runner_home: Path,
     runner_dir: Path,
@@ -74,7 +76,7 @@ def configure(
         runner_dir = runner_home / runner_dir
 
     runner_package_url = f'https://github.com/actions/runner/releases/download/v{runner_version}/actions-runner-linux-{runner_arch}-{runner_version}.tar.gz'
-    runner_package = runner_dir/Path(runner_package_url).name
+    runner_package = runner_dir / Path(runner_package_url).name
 
     if not dry_run:
         runner_dir.mkdir(exist_ok=True)
@@ -85,14 +87,18 @@ def configure(
         with tarfile.open(runner_package) as f:
             f.extractall(runner_dir)
 
-    script = runner_dir/'config.sh'
+    script = runner_dir / 'config.sh'
     script_args = [
         'config.sh',
         '--unattended',
-        '--url', url,
-        '--token', token,
-        '--labels', labels,
-        '--name', runner_name
+        '--url',
+        url,
+        '--token',
+        token,
+        '--labels',
+        labels,
+        '--name',
+        runner_name,
     ] + unknown
 
     if dry_run:

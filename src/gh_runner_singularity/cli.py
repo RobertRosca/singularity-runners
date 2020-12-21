@@ -1,8 +1,8 @@
 import argparse
 from pathlib import Path
 
-from . import configure
-from . import start
+from . import configure, start
+
 
 def cli():
     parser = argparse.ArgumentParser()
@@ -52,6 +52,7 @@ def cli():
     else:
         parser.print_help()
         return 0
+
 
 if __name__ == "__main__":
     exit(cli())
