@@ -3,3 +3,4 @@ tests/github-runner/
 github-runners/
 **/__pycache__/**
 **.egg-info
+.vscode
