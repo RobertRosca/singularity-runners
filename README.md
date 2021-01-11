@@ -36,8 +36,9 @@ The variables are:
 - `LOCAL_STORAGE`: the path to where you want to store the runner files locally
 - `LOCAL_CACHE`: used to store the `hostedtoolcache` directory for the runner,
   often used by GitHub Actions, like python-setup, to store installation files)
-- `url` and `token` values can be found on GitHub when setting up your own
-  runner: Settings -> Actions -> Self-hosted runners -> Add runner
+- `$GITHUB_REPO_URL` and `$GITHUB_RUNNER_TOKEN` values can be found on GitHub
+  when setting up your own runner: Settings -> Actions -> Self-hosted runners ->
+  Add runner
 
 To start the runner as a service:
 
@@ -111,8 +112,13 @@ After=network.target
 [Service]
 Type=forking
 Restart=always
-PIDFile=/home/roscar/.github-runners/vip-ipykernel/.pid
-ExecStart=/usr/local/bin/singularity instance start -C -B ~/.github-runners/vip-ipykernel/:/home/github-runner -B ~/scratch/github-runners/hostedtoolcache:/opt/hostedtoolcache --pid-file ~/.github-runners/vip-ipykernel/.pid ./github-runner.sif vip-ipykernel-runner
+PIDFile=/home/roscar/.github-runners/vip-ipykernel.pid
+ExecStart=/usr/local/bin/singularity instance start -C \
+    -B ~/.github-runners/vip-ipykernel/:/home/github-runner \
+    -B ~/scratch/github-runners/hostedtoolcache:/opt/hostedtoolcache \
+    --pid-file ~/.github-runners/vip-ipykernel.pid \
+    ./github-runner.sif \
+    vip-ipykernel-runner
 ExecStop=/usr/local/bin/singularity instance stop vip-ipykernel-runner
 
 [Install]
