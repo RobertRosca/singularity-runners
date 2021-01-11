@@ -19,12 +19,6 @@ From: debian:buster
 
     apt-get clean
 
-    #  Create symlinks to simplify setup of runners. Intention is that you bind
-    #  a directory to /mnt/github-runner, that directory is then used to store
-    #  all of the unique files for the runner you're starting
-    ln -s /mnt/github-runner /home/github-runner
-    ln -s /home/github-runner/hostedtoolcache /opt/hostedtoolcache
-
     python3 -m pip install --upgrade pip
     python3 -m pip install /opt/gh-runner-singularity
 
