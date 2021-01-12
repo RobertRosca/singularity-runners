@@ -1,9 +1,7 @@
 name: Formatting and Setup.py Checks
 
 on:
-  pull_request:
   push:
-    branches: [main, initial-dev]
 
 jobs:
   pre-commit:
