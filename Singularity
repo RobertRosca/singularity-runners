@@ -15,7 +15,7 @@ From: debian:buster
     apt-get install -y apt-transport-https build-essential ca-certificates \
         curl gettext iputils-ping jq libcurl4-openssl-dev liblttng-ust0 \
         openssh-client software-properties-common sudo supervisor unzip \
-        zlib1g-dev python3-pip
+        zlib1g-dev python3-pip git
 
     apt-get clean
 
