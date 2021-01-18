@@ -1,11 +1,11 @@
 import argparse
 from pathlib import Path
+from typing import Optional
 
 from . import configure, start
 
 
-def cli():
-    parser = argparse.ArgumentParser()
+def subparser(parser: argparse.ArgumentParser):
     subparser = parser.add_subparsers(dest='command')
 
     parser.add_argument(
@@ -37,6 +37,14 @@ def cli():
 
     configure.subparser(subparser.add_parser('configure'))
     start.subparser(subparser.add_parser('start'))
+
+    return parser
+
+def cli(parser: Optional[argparse.ArgumentParser] = None):
+    if parser is None:
+        parser = argparse.ArgumentParser()
+
+    parser = subparser(parser)
 
     args, unknown = parser.parse_known_args()
     #  Second pass to correctly parse args that apply to all methods
