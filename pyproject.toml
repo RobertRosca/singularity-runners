@@ -27,7 +27,7 @@ ensure_newline_before_comments = "True"
 line_length = 80
 
 [tool.poetry]
-name = "gh-runner-singularity"
+name = "singularity-runners"
 version = "0.1.0"
 description = ""
 authors = ["Robert Rosca <32569096+RobertRosca@users.noreply.github.com>"]
@@ -45,7 +45,7 @@ pre-commit = "^2.9.3"
 formatting = ["black", "isort", "pre-commit"]
 
 [tool.poetry.scripts]
-gh-runner-singularity = 'gh_runner_singularity.cli:cli'
+singularity-runners = 'gh_runner_singularity.cli:cli'
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
