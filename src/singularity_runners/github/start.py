@@ -8,7 +8,7 @@ def subparser(parser: argparse.ArgumentParser):
     return parser
 
 
-def start(
+def main(
     runner_home: Path,
     runner_dir: Path,
     unknown: List = None,

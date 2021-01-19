@@ -27,9 +27,9 @@ def cli():
     # gitlab
     sys.argv.pop(1)
     if args.provider == 'github':
-        return github.cli.cli(selected_parser)
+        return github.cli.main(selected_parser)
     elif args.provider == 'gitlab':
-        return gitlab.cli.cli(selected_parser)
+        return gitlab.cli.main(selected_parser)
 
 if __name__ == "__main__":
     exit(cli())

@@ -57,7 +57,7 @@ def subparser(parser: argparse.ArgumentParser):
     return parser
 
 
-def configure(
+def main(
     runner_home: Path,
     runner_dir: Path,
     url: str,

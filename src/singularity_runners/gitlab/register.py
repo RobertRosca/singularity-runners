@@ -47,7 +47,7 @@ def subparser(parser: argparse.ArgumentParser):
     return parser
 
 
-def register(
+def main(
     runner_home: Path,
     url: str,
     registration_token: str,

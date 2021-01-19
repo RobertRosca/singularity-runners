@@ -9,7 +9,7 @@ def subparser(parser: argparse.ArgumentParser):
     return parser
 
 
-def start(
+def main(
     runner_home: Path,
     runner_config_dir: str = '.gitlab-runner',
     unknown: List = None,

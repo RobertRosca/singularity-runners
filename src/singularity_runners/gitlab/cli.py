@@ -41,7 +41,7 @@ def subparser(parser: argparse.ArgumentParser):
 
     return parser
 
-def cli(parser: Optional[argparse.ArgumentParser] = None):
+def main(parser: Optional[argparse.ArgumentParser] = None):
     if parser is None:
         parser = argparse.ArgumentParser()
 
@@ -53,13 +53,13 @@ def cli(parser: Optional[argparse.ArgumentParser] = None):
     args_dict.pop('command')
 
     if args.command == 'register':
-        register.register(**args_dict, unknown=unknown)
+        register.main(**args_dict, unknown=unknown)
     elif args.command == 'start':
-        start.start(**args_dict, unknown=unknown)
+        start.main(**args_dict, unknown=unknown)
     else:
         parser.print_help()
         return 0
 
 
 if __name__ == "__main__":
-    exit(cli())
+    exit(main())
