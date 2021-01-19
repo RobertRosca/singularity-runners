@@ -3,8 +3,8 @@ From: centos:7.7
 
 
 %files
-    ../../../. /opt/singularity-runners
-    ../../../README.md /.singularity.d/runscript.help
+    . /opt/singularity-runners
+    ./README.md /.singularity.d/runscript.help
 
 %environment
     export AGENT_TOOLSDIRECTORY=/opt/hostedtoolcache
