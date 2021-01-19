@@ -10,7 +10,7 @@ From: debian:buster
     export AGENT_TOOLSDIRECTORY=/opt/hostedtoolcache
 
 %post
-    #  Install dependencies
+    #  Install core dependencies
     apt-get update
     apt-get install -y apt-transport-https build-essential ca-certificates \
         curl gettext iputils-ping jq libcurl4-openssl-dev liblttng-ust0 \
