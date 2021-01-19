@@ -34,7 +34,7 @@ authors = ["Robert Rosca <32569096+RobertRosca@users.noreply.github.com>"]
 include = ["src/singularity_runners/singularity/*"]
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.6"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
