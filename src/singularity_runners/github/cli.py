@@ -44,8 +44,6 @@ def cli(parser: Optional[argparse.ArgumentParser] = None):
     if parser is None:
         parser = argparse.ArgumentParser()
 
-    parser = subparser(parser)
-
     args, unknown = parser.parse_known_args()
     #  Second pass to correctly parse args that apply to all methods
     args, unknown = parser.parse_known_args(unknown, args)
