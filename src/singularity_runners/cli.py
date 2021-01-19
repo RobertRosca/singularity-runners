@@ -12,6 +12,7 @@ def subparser(parser: argparse.ArgumentParser):
 
     return parser
 
+
 def main():
     parser = subparser(argparse.ArgumentParser(add_help=False))
 
@@ -30,6 +31,7 @@ def main():
         return github.cli.main(selected_parser)
     elif args.provider == 'gitlab':
         return gitlab.cli.main(selected_parser)
+
 
 if __name__ == "__main__":
     exit(main())

@@ -41,6 +41,7 @@ def subparser(parser: argparse.ArgumentParser):
 
     return parser
 
+
 def main(parser: Optional[argparse.ArgumentParser] = None):
     if parser is None:
         parser = argparse.ArgumentParser()
