@@ -12,7 +12,7 @@ def subparser(parser: argparse.ArgumentParser):
 
     return parser
 
-def cli():
+def main():
     parser = subparser(argparse.ArgumentParser(add_help=False))
 
     args, _ = parser.parse_known_args()
@@ -32,4 +32,4 @@ def cli():
         return gitlab.cli.main(selected_parser)
 
 if __name__ == "__main__":
-    exit(cli())
+    exit(main())
