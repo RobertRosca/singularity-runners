@@ -3,8 +3,8 @@ From: debian:buster
 
 
 %files
-    ./ /opt/gh-runner-singularity
-    ./README.md /.singularity.d/runscript.help
+    ../../../. /opt/singularity-runners
+    ../../../README.md /.singularity.d/runscript.help
 
 %environment
     export AGENT_TOOLSDIRECTORY=/opt/hostedtoolcache
@@ -20,13 +20,13 @@ From: debian:buster
     apt-get clean
 
     python3 -m pip install --upgrade pip
-    python3 -m pip install /opt/gh-runner-singularity
+    python3 -m pip install /opt/singularity-runners
 
 %runscript
-    exec gh-runner-singularity "$@"
+    exec singularity-runners github "$@"
 
 %startscript
-    exec gh-runner-singularity start "$@"
+    exec singularity-runners github start "$@"
 
 %labels
     Author RobertRosca

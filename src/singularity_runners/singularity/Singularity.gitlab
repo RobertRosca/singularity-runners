@@ -3,8 +3,8 @@ From: centos:7.7
 
 
 %files
-    ./ /opt/gh-runner-singularity
-    ./README.md /.singularity.d/runscript.help
+    ../../../. /opt/singularity-runners
+    ../../../README.md /.singularity.d/runscript.help
 
 %environment
     export AGENT_TOOLSDIRECTORY=/opt/hostedtoolcache
@@ -21,14 +21,14 @@ From: centos:7.7
 
     yum clean -y all
 
-    # python3 -m pip install --upgrade pip
-    # python3 -m pip install /opt/gh-runner-singularity
+    python3 -m pip install --upgrade pip
+    python3 -m pip install /opt/singularity-runners
 
 %runscript
-    exec gh-runner-singularity "$@"
+    exec singularity-runners gitlab "$@"
 
 %startscript
-    exec gitlab-runner run -c /home/gitlab-runner/.gitlab-runner/config.toml "$@"
+    exec singularity-runners gitlab start "$@"
 
 %labels
     Author RobertRosca
