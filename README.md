@@ -1,28 +1,43 @@
-# GitHub Runner - Singularity
+# Singularity Runners
 
 [![https://www.singularity-hub.org/static/img/hosted-singularity--hub-%23e32929.svg](https://www.singularity-hub.org/static/img/hosted-singularity--hub-%23e32929.svg)](https://singularity-hub.org/collections/5053)
 
-A Singularity Container Image to Setup and Run GitHub Self-Hosted Runners
+- [Singularity Runners](#singularity-runners)
+  - [Quick-Start](#quick-start)
+    - [GitHub Runners](#github-runners)
+    - [GitLab Runners](#gitlab-runners)
+  - [Examples](#examples)
+  - [Running Instances as Systemd Service](#running-instances-as-systemd-service)
+  - [`singularity-runners` Python Package](#singularity-runners-python-package)
 
-Singularity container with dependencies required to run a self-hosted GitHub
-Runner. This repository contains the Singularity definition file (`Singularity`)
-used to create the the container, as well as python module
-(`gh-runner-singularity`) which provides a convenient CLI tool that is used in
-the container to set up and execute the runner inside the container.
+A Singularity Container Image to Setup and Run Self-Hosted Runners
+
+Singularity container with dependencies required to run a self-hosted GitHub and
+GitLab Runners. This repository contains two Singularity definition files
+(`src/singularity_runners/singularity`) used to create the the containers, as
+well as python module (`singularity_runners`) which provides a convenient CLI
+tool that is used in the container to set up and execute the runner inside the
+container.
 
 ## Quick-Start
+
+### GitHub Runners
 
 To get the container either:
 
 1. Build it locally:  \
-   `sudo singularity build github-runner.sif ./Singularity`
-2. Pull it from Singularity Hub:  \
-   `singularity pull shub://RobertRosca/gh-runner-singularity`
+   ```
+   sudo singularity build github-runner.sif Singularity.github
+   ```
+2. TODO: Pull it from Singularity Hub:  \
+   ```
+   ...?
+   ```
 
 You can see the help for the bundled CLI tool by running: `singularity run
 ./github-runner.sif --help`
 
-Then to configure your first runner:
+Then to configure your runner:
 
 ```
 singularity run -C \
@@ -50,7 +65,44 @@ singularity instance start -C \
 ```
 
 `INSTANCE_NAME` can be any name you want the instance to have, it's what
-you'll see when running `singularity instance list`
+you'll see when running `singularity instance list`.
+
+### GitLab Runners
+
+1. Build it locally:  \
+   ```
+   sudo singularity build gitlab-runner.sif Singularity.gitlab
+   ```
+2. TODO: Pull it from Singularity Hub:  \
+   ```
+   ...?
+   ```
+
+You can see the help for the bundled CLI tool by running: `singularity run
+./gitlab-runner.sif --help`
+
+
+Then to register the runner:
+
+```
+singularity run -C \
+    -B $LOCAL_STORAGE:/home/gitlab-runner \
+    -B $LOCAL_CACHE:/opt/hostedtoolcache \
+    /data/ci-cd/singularity-runners/gitlab-runner.sif \
+    register --url $GITLAB_REPO_URL --registration-token $GITLAB_REGISTRATION_TOKEN
+```
+
+To start the runner as a service:
+
+```
+singularity instance start -C \
+    -B $LOCAL_STORAGE:/home/gitlab-runner \
+    -B $LOCAL_CACHE:/opt/hostedtoolcache \
+    ./gitlab-runner.sif $INSTANCE_NAME
+```
+
+`INSTANCE_NAME` can be any name you want the instance to have, it's what
+you'll see when running `singularity instance list`.
 
 ## Examples
 
@@ -142,3 +194,25 @@ systemctl --user status gh_runner_vip_ipykernel
 # automatic startup
 systemctl --user enable gh_runner_vip_ipykernel
 ```
+
+## `singularity-runners` Python Package
+
+`src/singularity-runners` contains the helper python package for registering and
+starting runners for both GitHub and GitLab. The package is relatively simple,
+and just wraps common command line arguments used by both providers self-hosted
+runners for convenience.
+
+Currently the only implemented commands are:
+
+- Setting up the self-hosted runners
+  - GitHub: `singularity-runners github configure`
+  - GitLab: `singularity-runners gitlab register`
+- Starting the self-hosted runners:
+  - GitHub: `singularity-runners github start`
+  - GitLab: `singularity-runners gitlab start`
+
+The package is installed inside the containers, the containers then call the
+relevant commands as part of their `%runscript` (GitHub container calls
+`singularity-runners github` and passes through commands, likewise GitLab calls
+`singularity-runners gitlab`) and `%startscript` (calls the `start` action and
+passes through commands).
