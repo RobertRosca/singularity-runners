@@ -1,28 +1,58 @@
 Bootstrap: library
 From: centos:7.7
-
+Stage: build
 
 %files
     . /opt/singularity-runners
+
+%post
+    #  Build Python 3.9.1
+    ## Install build dependencies
+    yum update -y
+    yum install -y gcc zlib-devel bzip2 bzip2-devel readline-devel sqlite \
+        sqlite-devel openssl-devel tk-devel libffi-devel curl tar git make
+
+    ## Download source and configure
+    curl -O https://www.python.org/ftp/python/3.9.1/Python-3.9.1.tgz
+    tar -xzf Python-3.9.1.tgz
+    cd Python-3.9.1/
+    ./configure --prefix=/opt/python3.9
+
+    ## Install
+    make altinstall
+    export PATH="/opt/python3.9/bin:$PATH"
+
+    # Set up helper package
+    python3.9 -m pip install --upgrade pip
+    python3.9 -m pip install /opt/singularity-runners
+
+    #  Clean up untracked files
+    cd /opt/singularity-runners && git clean -fxd
+
+
+Bootstrap: library
+From: centos:7.7
+Stage: final
+
+%files from build
+    /opt/* /opt
+
+%files
     ./README.md /.singularity.d/runscript.help
 
 %environment
     export AGENT_TOOLSDIRECTORY=/opt/hostedtoolcache
+    export PATH="/opt/python3.9/bin:$PATH"
 
 %post
     #  Install dependencies
     yum update -y
-    yum install -y python3 python3-pip sudo
+    yum install -y sudo
 
     #  Install GitLab Runner
     curl -L "https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh" | sudo bash
     export GITLAB_RUNNER_DISABLE_SKEL=true
     yum install -y gitlab-runner
-
-    yum clean -y all
-
-    python3 -m pip install --upgrade pip
-    python3 -m pip install /opt/singularity-runners
 
 %runscript
     exec singularity-runners gitlab "$@"
