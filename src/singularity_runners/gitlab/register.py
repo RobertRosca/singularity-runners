@@ -74,8 +74,8 @@ def main(
         registration_token,
         '--executor',
         executor,
-        '--tag-list',
-        tag_list,
+        # '--tag-list',  # For some reason adding a tags breaks the registration
+        # tag_list,
         '--name',
         runner_name,
     ] + unknown
