@@ -19,8 +19,12 @@ From: debian:buster
 
     apt-get clean
 
+    ## Set up helper package
     python3 -m pip install --upgrade pip
     python3 -m pip install /opt/singularity-runners
+
+    #  Clean up untracked files
+    cd /opt/singularity-runners && git clean -fxd
 
 %runscript
     exec singularity-runners github "$@"
