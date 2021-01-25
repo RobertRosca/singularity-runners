@@ -4,13 +4,19 @@ Stage: build
 
 %files
     . /opt/singularity-runners
+    ./README.md /.singularity.d/runscript.help
+
+%environment
+    export AGENT_TOOLSDIRECTORY=/opt/hostedtoolcache
+    export PATH="/opt/python3.9/bin:$PATH"
 
 %post
     #  Build Python 3.9.1
     ## Install build dependencies
     yum update -y
     yum install -y gcc zlib-devel bzip2 bzip2-devel readline-devel sqlite \
-        sqlite-devel openssl-devel tk-devel libffi-devel curl tar git make
+        sqlite-devel openssl-devel tk-devel libffi-devel curl tar git make \
+        sudo gzip bzip2 xz zstd patch
 
     ## Download source and configure
     curl -O https://www.python.org/ftp/python/3.9.1/Python-3.9.1.tgz
@@ -28,26 +34,6 @@ Stage: build
 
     #  Clean up untracked files
     cd /opt/singularity-runners && git clean -fxd
-
-
-Bootstrap: library
-From: centos:7.7
-Stage: final
-
-%files from build
-    /opt/* /opt
-
-%files
-    ./README.md /.singularity.d/runscript.help
-
-%environment
-    export AGENT_TOOLSDIRECTORY=/opt/hostedtoolcache
-    export PATH="/opt/python3.9/bin:$PATH"
-
-%post
-    #  Install dependencies
-    yum update -y
-    yum install -y sudo
 
     #  Install GitLab Runner
     curl -L "https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh" | sudo bash
