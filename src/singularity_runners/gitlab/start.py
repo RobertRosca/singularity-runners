@@ -20,6 +20,7 @@ def main(
 
     command = 'gitlab-runner'
     command_args = [
+        'gitlab-runner',
         'run',
         '-c',
         str(runner_home / runner_config_dir / 'config.toml'),
