@@ -44,6 +44,13 @@ def subparser(parser: argparse.ArgumentParser):
         required=False,
     )
 
+    parser.add_argument(
+        '--builds-dir',
+        default='/home/gitlab-runner/builds',
+        help="Directory to store builds in, defaults to '/home/gitlab-runner/builds'",
+        required=False,
+    )
+
     return parser
 
 
@@ -55,6 +62,7 @@ def main(
     runner_name: str = f"{platform.node()}-singularity",
     executor: str = 'shell',
     tag_list: str = "singularity,",
+    builds_dir: str = "/home/gitlab-runner/builds",
     dry_run: bool = False,
     unknown: List = None,
 ):
@@ -74,8 +82,10 @@ def main(
         registration_token,
         '--executor',
         executor,
-        # '--tag-list',  # For some reason adding a tags breaks the registration
-        # tag_list,
+        '--tag-list',
+        tag_list,
+        '--builds-dir',
+        builds_dir,
         '--name',
         runner_name,
     ] + unknown
