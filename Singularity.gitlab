@@ -24,7 +24,7 @@ Stage: build
     yum update -y
     yum install -y gcc zlib-devel bzip2 bzip2-devel readline-devel sqlite \
         sqlite-devel openssl-devel tk-devel libffi-devel curl tar git make \
-        gzip bzip2 xz zstd patch
+        gzip bzip2 xz zstd patch unzip
 
     ## Download source and configure
     curl -O https://www.python.org/ftp/python/3.9.1/Python-3.9.1.tgz
