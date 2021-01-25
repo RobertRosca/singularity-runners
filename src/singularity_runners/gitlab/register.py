@@ -86,4 +86,4 @@ def main(
 
     print("Running: ", command, " ".join(command_args[1:]))
 
-    os.execv(command, command_args)
+    os.execvp(command, command_args)

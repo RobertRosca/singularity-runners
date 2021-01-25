@@ -37,4 +37,4 @@ def main(
             f"{command} not found, do you have gitlab-runner installed?"
         )
 
-    return os.execv(command, command_args)
+    return os.execvp(command, command_args)
