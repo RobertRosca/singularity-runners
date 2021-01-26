@@ -1,0 +1,76 @@
+Bootstrap: library
+From: centos:7.7
+Stage: build
+
+%files
+    . /opt/singularity-runners
+    ./README.md /.singularity.d/runscript.help
+
+%environment
+    export AGENT_TOOLSDIRECTORY=/opt/hostedtoolcache
+    export PATH="/opt/python3.9/bin:$PATH"
+
+%post
+    #  Install GitLab Runner
+    yum update -y
+    yum install -y sudo
+
+    curl -L "https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh" | sudo bash
+    export GITLAB_RUNNER_DISABLE_SKEL=true
+    yum install -y gitlab-runner
+
+    #  Build Git 2.30.0
+    ## Install build dependencies
+    yum groupinstall -y "Development Tools"
+    yum install -y gettext-devel openssl-devel perl-CPAN perl-devel zlib-devel \
+        libcurl-devel wget
+
+    ## Download source and configure
+    mkdir -p /build && cd /build
+    wget https://github.com/git/git/archive/v2.30.0.tar.gz
+    tar -zxf v2.30.0.tar.gz
+    cd git-2.30.0
+    make configure
+    ./configure --prefix=/usr/local
+
+    ## Install
+    make install &
+
+    #  Build Python 3.9.1
+    ## Install build dependencies
+    yum update -y
+    yum install -y gcc zlib-devel bzip2 bzip2-devel readline-devel sqlite \
+        sqlite-devel openssl-devel tk-devel libffi-devel curl tar git make \
+        gzip bzip2 xz zstd patch unzip file
+
+    ## Download source and configure
+    mkdir -p /build && cd /build
+    curl -O https://www.python.org/ftp/python/3.9.1/Python-3.9.1.tgz
+    tar -xzf Python-3.9.1.tgz
+    cd Python-3.9.1/
+    ./configure --prefix=/opt/python3.9
+
+    ## Install
+    make altinstall &
+    export PATH="/opt/python3.9/bin:$PATH"
+
+    # Wait for Python/Git installs to finish
+    wait
+
+    # Set up helper package
+    python3.9 -m pip install --upgrade pip
+    python3.9 -m pip install /opt/singularity-runners
+
+    #  Clean up untracked files
+    cd /opt/singularity-runners && git clean -fxd
+    rm -rf /build
+
+%runscript
+    exec singularity-runners gitlab "$@"
+
+%startscript
+    exec singularity-runners gitlab start "$@"
+
+%labels
+    Author RobertRosca
+    Version v0.1.0

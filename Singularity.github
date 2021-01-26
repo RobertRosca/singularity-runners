@@ -1,0 +1,37 @@
+Bootstrap: library
+From: debian:buster
+
+
+%files
+    . /opt/singularity-runners
+    ./README.md /.singularity.d/runscript.help
+
+%environment
+    export AGENT_TOOLSDIRECTORY=/opt/hostedtoolcache
+
+%post
+    #  Install core dependencies
+    apt-get update
+    apt-get install -y apt-transport-https build-essential ca-certificates \
+        curl gettext iputils-ping jq libcurl4-openssl-dev liblttng-ust0 \
+        openssh-client software-properties-common sudo supervisor unzip \
+        zlib1g-dev python3-pip git
+
+    apt-get clean
+
+    ## Set up helper package
+    python3 -m pip install --upgrade pip
+    python3 -m pip install /opt/singularity-runners
+
+    #  Clean up untracked files
+    cd /opt/singularity-runners && git clean -fxd
+
+%runscript
+    exec singularity-runners github "$@"
+
+%startscript
+    exec singularity-runners github start "$@"
+
+%labels
+    Author RobertRosca
+    Version v0.1.0
