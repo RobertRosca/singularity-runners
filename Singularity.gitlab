@@ -13,11 +13,27 @@ Stage: build
 %post
     #  Install GitLab Runner
     yum update -y
-    yum install -y sudo
+    yum install -y sudo wget
 
     curl -L "https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh" | sudo bash
     export GITLAB_RUNNER_DISABLE_SKEL=true
     yum install -y gitlab-runner
+
+    #  Build Git 2.30.0
+    ## Install build dependencies
+    yum groupinstall -y "Development Tools"
+    yum install -y gettext-devel openssl-devel perl-CPAN perl-devel zlib-devel
+
+    ## Download source and configure
+    mkdir -p /build && cd /build
+    wget https://github.com/git/git/archive/v2.30.0.tar.gz
+    tar -zxf v2.30.0.tar.gz
+    cd git-2.30.0
+    make configure
+    ./configure --prefix=/usr/local
+
+    ## Install
+    make install &
 
     #  Build Python 3.9.1
     ## Install build dependencies
@@ -27,14 +43,18 @@ Stage: build
         gzip bzip2 xz zstd patch unzip file
 
     ## Download source and configure
+    mkdir -p /build && cd /build
     curl -O https://www.python.org/ftp/python/3.9.1/Python-3.9.1.tgz
     tar -xzf Python-3.9.1.tgz
     cd Python-3.9.1/
     ./configure --prefix=/opt/python3.9
 
     ## Install
-    make altinstall
+    make altinstall &
     export PATH="/opt/python3.9/bin:$PATH"
+
+    # Wait for Python/Git installs to finish
+    wait
 
     # Set up helper package
     python3.9 -m pip install --upgrade pip
@@ -42,6 +62,7 @@ Stage: build
 
     #  Clean up untracked files
     cd /opt/singularity-runners && git clean -fxd
+    rm -rf /build
 
 %runscript
     exec singularity-runners gitlab "$@"
