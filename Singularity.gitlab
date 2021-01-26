@@ -13,7 +13,7 @@ Stage: build
 %post
     #  Install GitLab Runner
     yum update -y
-    yum install -y sudo wget
+    yum install -y sudo
 
     curl -L "https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh" | sudo bash
     export GITLAB_RUNNER_DISABLE_SKEL=true
@@ -22,7 +22,8 @@ Stage: build
     #  Build Git 2.30.0
     ## Install build dependencies
     yum groupinstall -y "Development Tools"
-    yum install -y gettext-devel openssl-devel perl-CPAN perl-devel zlib-devel
+    yum install -y gettext-devel openssl-devel perl-CPAN perl-devel zlib-devel \
+        libcurl-devel wget
 
     ## Download source and configure
     mkdir -p /build && cd /build
